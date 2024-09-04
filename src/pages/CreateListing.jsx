@@ -13,15 +13,29 @@ const CreateListing = () => {
   const [subject, setSubject] = useState("");
   const [semester, setSemester] = useState("");
   const [noteType, setNoteType] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   /* DOCUMENT UPLOAD */
   const [documents, setDocuments] = useState([]);
 
   const handleUploadDocuments = (e) => {
     const newDocuments = e.target.files;
-    setDocuments((prevDocuments) => [...prevDocuments, ...newDocuments]);
-  };
+    let isValid = true;
 
+    for (let i = 0; i < newDocuments.length; i++) {
+      if (newDocuments[i].size > 10 * 1024 * 1024) {
+        isValid = false;
+        setError("File size exceeds 10MB limit");
+        break;
+      }
+    }
+
+    if (isValid) {
+      setDocuments((prevDocuments) => [...prevDocuments, ...newDocuments]);
+      setError(null);
+    }
+  };
   const handleDragDocument = (result) => {
     if (!result.destination) return;
 
@@ -59,6 +73,7 @@ const CreateListing = () => {
 
   const handlePost = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       /* Create a new FormData object to handle file uploads */
@@ -90,6 +105,8 @@ const CreateListing = () => {
       }
     } catch (err) {
       console.log("Publish Note failed", err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -195,6 +212,7 @@ const CreateListing = () => {
                   >
                     {documents.length < 1 && (
                       <>
+                        {error && <div style={{ color: "red" }}>{error}</div>}
                         <input
                           id="document"
                           type="file"
@@ -260,10 +278,11 @@ const CreateListing = () => {
                 )}
               </Droppable>
             </DragDropContext>
+            <span>The file size should not exceed 10 megabytes.</span>
           </div>
 
-          <button className="submit_btn" type="submit">
-            UPLOAD NOTES
+          <button className="submit_btn" type="submit" disabled={loading|| error}>
+            {loading ? "UPLOADING..." : "UPLOAD NOTES"}
           </button>
         </form>
       </div>

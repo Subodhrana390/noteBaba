@@ -23,7 +23,7 @@ const CategoryBySemester = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_BASE_URL}/notes?semester=${selectedSemester}`
         );
-        setNotes(response.data.data || []);
+        setNotes(response.data || []);
       } catch (err) {
         setError("Failed to fetch notes");
         console.error(err);
@@ -75,7 +75,7 @@ const CategoryBySemester = () => {
             {notes.length > 0 &&
               notes.map((note, index) => (
                 <li key={index} className="card">
-                  <a href={`/notes/${note._id}`} target="_blank">
+                  <a href={`/${note._id}`} target="_blank">
                     <div className="card_img" style={{ marginBottom: "10px" }}>
                       <img
                         src="https://www.elegantthemes.com/blog/wp-content/uploads/2018/12/top11.png"

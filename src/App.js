@@ -49,9 +49,9 @@ function App() {
             path="/create-listing"
             element={user ? <CreateListing /> : <Navigate to="/login" />}
           />
-          <Route exact path="/search" element={<SearchPage />} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="*" element={<HomePage />} />
-          <Route exact path="/notes/:listingId" element={<ListingPage />} />
+          <Route path="/:listingId" element={<ListingPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
