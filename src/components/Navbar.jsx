@@ -89,7 +89,7 @@ const Navbar = () => {
           <div className="navbar_right_accountmenu">
             <Link
               to="/create-listing"
-              nClick={() => setDropdownMenu(!dropdownMenu)}
+              onClick={() => setDropdownMenu(!dropdownMenu)}
             >
               Become A Host
             </Link>

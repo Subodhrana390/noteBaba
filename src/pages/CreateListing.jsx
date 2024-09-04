@@ -77,10 +77,13 @@ const CreateListing = () => {
       });
 
       /* Send a POST request to the server */
-      const response = await fetch("http://localhost:3001/notes/create", {
-        method: "POST",
-        body: noteForm,
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/notes/create`,
+        {
+          method: "POST",
+          body: noteForm,
+        }
+      );
 
       if (response.ok) {
         navigate("/");
