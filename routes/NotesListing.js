@@ -3,17 +3,11 @@ const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const NotesListing = require("../models/NotesListing");
 const User = require("../models/User");
+const streamifier = require("streamifier");
+const { Promise } = require("mongoose");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage });
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 const uploadImage = async (file) => {
   const uploadResponse = await cloudinary.uploader.upload(file, {
@@ -34,15 +28,30 @@ router.post("/create", upload.array("noteFiles"), async (req, res) => {
     }
 
     // Prepare the listingDocUrl array with object structure {_id, url}
-    const listingDocUrl = await Promise.all(
-      files.map(async (file) => {
-        const resUrl = await uploadImage(file.path);
-        console.log(resUrl);
-        return { _id: file.filename, asset_id: resUrl._id, url: resUrl.url }; // _id can be file's original name or some unique identifier
-      })
-    );
 
-    // Create a new NotesListing document
+    const uploadPromises = files.map((file) => {
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: "your_folder_name" },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve({
+                _id: result.filename,
+                asset_id: result._id,
+                url: result.url,
+              });
+            }
+          }
+        );
+
+        streamifier.createReadStream(file.buffer).pipe(uploadStream);
+      });
+    });
+
+    const listingDocUrl = await Promise.all(uploadPromises);
+
     const newListing = new NotesListing({
       creator,
       subject,
@@ -73,11 +82,11 @@ router.get("/", async (req, res) => {
     if (subject) query.subject = subject;
     if (noteType) query.noteType = noteType;
 
-    if (semester) query.semester = parseInt(semester);
+    if (semester) query.semester = semester;
 
     let listings = await NotesListing.find(query).populate("creator");
 
-    res.status(200).json({ data: listings });
+    res.status(200).json(listings);
   } catch (err) {
     res
       .status(404)
@@ -148,7 +157,7 @@ router.get("/search/:search", async (req, res) => {
   try {
     let listings = [];
 
-    if (search === "all") {
+    if (search === "") {
       listings = await NotesListing.find().populate("creator");
     } else {
       listings = await NotesListing.find({
@@ -158,8 +167,8 @@ router.get("/search/:search", async (req, res) => {
         ],
       }).populate("creator");
     }
-
-    res.status(200).json(listings);
+    let counts = listings.length;
+    res.status(200).json({ listings, counts });
   } catch (err) {
     res
       .status(404)
@@ -180,6 +189,7 @@ router.get("/:listingId", async (req, res) => {
       .json({ message: "Listing can not found!", error: err.message });
   }
 });
+
 router.delete("/assets/:public_id", async (req, res) => {
   try {
     const { public_id } = req.params;
