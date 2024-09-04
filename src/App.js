@@ -51,7 +51,7 @@ function App() {
           />
           <Route path="/search" element={<SearchPage />} />
           <Route path="*" element={<HomePage />} />
-          <Route path="/:listingId" element={<ListingPage />} />
+          <Route path="/notes/:listingId" element={<ListingPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
