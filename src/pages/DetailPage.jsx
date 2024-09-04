@@ -10,7 +10,7 @@ import { pdfjs } from "react-pdf";
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`;
 
 const ListingPage = () => {
-  const { listingId } = useParams();
+  let { listingId } = useParams();
   const [loading, setLoading] = useState(false);
   const [listing, setListing] = useState(null);
   const [error, setError] = useState(null);
@@ -31,7 +31,6 @@ const ListingPage = () => {
         }
 
         const data = await response.json();
-        console.log(data);
         setListing(data);
       } catch (err) {
         setError("Failed to load listing details. Please try again.");
@@ -69,12 +68,11 @@ const ListingPage = () => {
             <span>{listing.noteType}</span>
 
             <div className="doc_list">
-              {listing &&
-                listing.listingDocUrl.map((doc, index) => (
-                  <a key={index} href={doc.url} className="doc_url">
-                    View Document
-                  </a>
-                ))}
+              {listing.listingDocUrl.map((doc, index) => (
+                <a key={index} href={doc.url} className="doc_url">
+                  View Document
+                </a>
+              ))}
             </div>
             <button className="Add_to_Wishlist">Add to WishList</button>
           </div>
