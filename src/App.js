@@ -5,7 +5,8 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import CreateListing from "./pages/CreateListing";
 import CategoryPage from "./pages/CategoryPage";
-import ListingPage from "./pages/ListingPage";
+import SearchPage from "./pages/SearchPage";
+import ListingPage from "./pages/DetailPage";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { useSelector } from "react-redux";
@@ -47,7 +48,9 @@ function App() {
             path="/create-listing"
             element={user ? <CreateListing /> : <Navigate to="/login" />}
           />
-          <Route path="/notes/:listingId" element={<ListingPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="*" element={<HomePage />} />
+          <Route path="/:listingId" element={<ListingPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>

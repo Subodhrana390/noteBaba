@@ -4,18 +4,14 @@ import { Typography, AppBar, Toolbar } from "@mui/material";
 const Footer = () => {
   return (
     <div>
-      <AppBar position="static" color="default" sx={{ top: "auto", bottom: 0 }}>
-        <Toolbar>
-          <Typography
-            variant="body1"
-            color="textSecondary"
-            align="center"
-            sx={{ flexGrow: 1 }}
-          >
-            © 2024 Note Page, All rights reserved.
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Typography
+        variant="body1"
+        color="textSecondary"
+        align="center"
+        sx={{ flexGrow: 1 }}
+      >
+        © 2024 Note Page, All rights reserved.
+      </Typography>
     </div>
   );
 };

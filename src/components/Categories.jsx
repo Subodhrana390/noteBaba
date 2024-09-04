@@ -17,7 +17,7 @@ const Categories = () => {
 
       <div className="categories_list">
         {noteTypes?.map((category, index) => (
-          <Link to={`/category/${category.name}`}>
+          <Link to={`/category/${category.name}`} key={index}>
             <div className="category" key={index}>
               <img src={category.img} alt={category.label} />
               <div className="overlay"></div>

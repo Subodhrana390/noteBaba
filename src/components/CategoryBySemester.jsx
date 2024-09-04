@@ -1,14 +1,18 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import "../styles/CategoryBySemester.scss";
 import WarningIcon from "@mui/icons-material/Warning";
-import "../styles/CategoryPage.scss";
+import { semesters } from "../data.js";
 
 const CategoryBySemester = () => {
-  const { category } = useParams();
+  const [selectedSemester, setSelectedSemester] = useState(1);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const handleSemesterSelect = (semester) => {
+    setSelectedSemester(semester);
+  };
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -16,7 +20,7 @@ const CategoryBySemester = () => {
       setError(null);
       try {
         const response = await axios.get(
-          `http://localhost:3001/notes?noteType=${category}`
+          `http://localhost:3001/notes?semester=${selectedSemester}`
         );
         setNotes(response.data || []);
       } catch (err) {
@@ -28,15 +32,43 @@ const CategoryBySemester = () => {
     };
 
     fetchNotes();
-  }, []);
+  }, [selectedSemester]);
 
   return (
-    <div className="Category_Page">
+    <div className="Category_By_Semester">
+      <h1>Select a Semester</h1>
+      <div className="Select_Semester">
+        {semesters.map((semester, index) => (
+          <button
+            key={index}
+            onClick={() =>
+              handleSemesterSelect(parseInt(semester.label.substring(9)))
+            }
+            style={{
+              margin: "5px",
+              padding: "10px",
+              backgroundColor:
+                selectedSemester === parseInt(semester.label.substring(9))
+                  ? "#468847"
+                  : "#f0f0f0",
+              color:
+                selectedSemester === parseInt(semester.label.substring(9))
+                  ? "#fff"
+                  : "#000",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Semester {semester.icon}
+          </button>
+        ))}
+      </div>
+
       {loading && <p>Loading notes...</p>}
       {error && <p>{error}</p>}
 
-      <div className="category_title">{category}</div>
-      {!loading && !error && notes.length > 0 && (
+      {!loading && !error && selectedSemester && notes.length > 0 && (
         <div id="semester">
           <ul>
             {notes.map((note, index) => (
@@ -61,7 +93,7 @@ const CategoryBySemester = () => {
         </div>
       )}
 
-      {!loading && !error && notes.length === 0 && (
+      {!loading && !error && selectedSemester && notes.length === 0 && (
         <div className="Not_found">
           <WarningIcon className="Warning" />
           <p>No notes available for this semester.</p>
