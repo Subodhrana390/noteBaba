@@ -69,11 +69,12 @@ const ListingPage = () => {
             <span>{listing.noteType}</span>
 
             <div className="doc_list">
-              {listing.listingDocUrl.map((doc, index) => (
-                <a key={index} href={doc.url} className="doc_url">
-                  View Document
-                </a>
-              ))}
+              {listing &&
+                listing.listingDocUrl.map((doc, index) => (
+                  <a key={index} href={doc.url} className="doc_url">
+                    View Document
+                  </a>
+                ))}
             </div>
             <button className="Add_to_Wishlist">Add to WishList</button>
           </div>
