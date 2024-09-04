@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Loader from "./components/Loader";
 
+
 function App() {
   const user = useSelector((state) => state.user);
   const [isLoaded, setIsLoaded] = useState(false);

@@ -23,12 +23,12 @@ const SearchPage = () => {
     const timeoutId = setTimeout(() => {
       axios({
         method: "get",
-        url: `http://localhost:3001/notes/search/${search}`,
+        url: `${process.env.REACT_APP_BASE_URL}/notes/search/${search}`,
         cancelToken: newCancelToken.token,
       })
         .then((response) => {
-          setNotes(response.data.listings);
-          setCounts(response.data.counts);
+          setCounts(response.data.length);
+          setNotes(response.data);
         })
         .catch((err) => {
           if (axios.isCancel(err)) {
@@ -64,7 +64,7 @@ const SearchPage = () => {
         <div className="Search_result">
           <h3>{counts} Search Results</h3>
           <ul className="Results">
-            {notes.map((note, index) => (
+            {notes?.map((note, index) => (
               <li key={index} className="card">
                 <a href={`/${note._id}`} target="_blank">
                   <div className="card_img" style={{ marginBottom: "10px" }}>

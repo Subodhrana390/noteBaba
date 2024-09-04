@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import WarningIcon from "@mui/icons-material/Warning";
 import "../styles/CategoryPage.scss";
+import Loader from "../components/Loader";
 
 const CategoryBySemester = () => {
   const { category } = useParams();
@@ -16,9 +17,9 @@ const CategoryBySemester = () => {
       setError(null);
       try {
         const response = await axios.get(
-          `http://localhost:3001/notes?noteType=${category}`
+          `${process.env.REACT_APP_BASE_URL}/notes?noteType=${category}`
         );
-        setNotes(response.data || []);
+        setNotes(response.data.data || []);
       } catch (err) {
         setError("Failed to fetch notes");
         console.error(err);
@@ -32,7 +33,7 @@ const CategoryBySemester = () => {
 
   return (
     <div className="Category_Page">
-      {loading && <p>Loading notes...</p>}
+      {loading && <Loader />}
       {error && <p>{error}</p>}
 
       <div className="category_title">{category}</div>
