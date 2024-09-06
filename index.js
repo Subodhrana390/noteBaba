@@ -1,32 +1,24 @@
-const express = require("express");
+import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
+import cors from "cors";
+import bodyParser from "body-parser";
+import authRoutes from "./routes/auth.js";
+import notesRoutes from "./routes/Notes.js";
+import "./database/db.js";
+
 const app = express();
-const mongoose = require("mongoose");
-const dotenv = require("dotenv").config();
-const cors = require("cors");
-const cloudinary = require("cloudinary").v2;
+const PORT = process.env.PORT || 8080;
 
-cloudinary.config({
-  cloud_name: "dyceamtvk",
-  api_key: "436569631896442",
-  api_secret: "fONElqz3VaxzyDEES2VxKt_7tiM",
-});
-
-const authRoutes = require("./routes/auth.js");
-const notesListingRoutes = require("./routes/NotesListing.js");
-
+// Middlewares
 app.use(cors());
-app.use(express.json({ limit: "100mb" }));
-app.use(express.static("public"));
+app.use(bodyParser.json());
 
-app.use("/auth", authRoutes);
-app.use("/notes", notesListingRoutes);
+// Routes
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/notes", notesRoutes);
 
-const PORT = 3001;
-mongoose
-  .connect(process.env.MONGO_URL, {
-    dbName: "Dream_Nest",
-  })
-  .then(() => {
-    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
-  })
-  .catch((err) => console.log(`${err} did not connect`));
+// Server Initialization
+app.listen(PORT, () => {
+  console.log(`Server is running on PORT: ${PORT}`);
+});

@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const NotesListingSchema = new mongoose.Schema(
+const NotesSchema = new mongoose.Schema(
   {
     creator: {
       type: mongoose.Schema.Types.ObjectId,
@@ -19,9 +19,18 @@ const NotesListingSchema = new mongoose.Schema(
     },
     listingDocUrl: [
       {
-        _id: String,
-        asset_id: String,
-        url: String,
+        _id: {
+          type: String,
+          required: true,
+        },
+        asset_id: {
+          type: String,
+          required: true,
+        },
+        url: {
+          type: String,
+          required: true,
+        },
       },
     ],
     title: {
@@ -32,9 +41,6 @@ const NotesListingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    topics: {
-      type: String,
-    },
     noteType: {
       type: String,
       required: true,
@@ -43,5 +49,6 @@ const NotesListingSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const NotesListing = mongoose.model("NotesListing", NotesListingSchema);
-module.exports = NotesListing;
+const Notes = mongoose.model("Notes", NotesSchema);
+
+export default Notes;
