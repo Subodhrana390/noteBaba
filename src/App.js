@@ -6,7 +6,7 @@ import HomePage from "./pages/HomePage";
 import CreateListing from "./pages/CreateListing";
 import CategoryPage from "./pages/CategoryPage";
 import SearchPage from "./pages/SearchPage";
-import ListingPage from "./pages/DetailPage";
+import DetailPge from "./pages/DetailPage";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { useSelector } from "react-redux";
@@ -16,20 +16,6 @@ import Loader from "./components/Loader";
 
 function App() {
   const user = useSelector((state) => state.user);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    const loadUserData = () => {
-      setIsLoaded(true);
-    };
-
-    loadUserData();
-  }, []);
-
-  if (!isLoaded) {
-    return <Loader />;
-  }
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -51,7 +37,7 @@ function App() {
           />
           <Route path="/search" element={<SearchPage />} />
           <Route path="*" element={<HomePage />} />
-          <Route path="/:listingId" element={<ListingPage />} />
+          <Route path="/:noteId" element={<DetailPage/>} />
         </Routes>
         <Footer />
       </BrowserRouter>
