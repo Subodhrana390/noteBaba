@@ -19,7 +19,7 @@ const CategoryBySemester = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_BASE_URL}/notes?noteType=${category}`
         );
-        setNotes(response.data || []);
+        setNotes(response.data.data.notes || []);
       } catch (err) {
         setError("Failed to fetch notes");
         console.error(err);
