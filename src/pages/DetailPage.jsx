@@ -10,7 +10,7 @@ import { pdfjs } from "react-pdf";
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`;
 
 const ListingPage = () => {
-  let { listingId } = useParams();
+  let { noteId } = useParams();
   const [loading, setLoading] = useState(false);
   const [listing, setListing] = useState(null);
   const [error, setError] = useState(null);
@@ -20,7 +20,7 @@ const ListingPage = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_BASE_URL}/notes/${listingId}`,
+          `${process.env.REACT_APP_BASE_URL}/notes/${noteId}`,
           {
             method: "GET",
           }
@@ -40,7 +40,7 @@ const ListingPage = () => {
     };
 
     fetchListingDetails();
-  }, [listingId]);
+  }, [noteId]);
 
   if (loading) return <Loader />;
 
