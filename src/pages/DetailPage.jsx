@@ -31,7 +31,7 @@ const ListingPage = () => {
         }
 
         const data = await response.json();
-        setListing(data);
+        setListing(data.data);
       } catch (err) {
         setError("Failed to load listing details. Please try again.");
       } finally {
