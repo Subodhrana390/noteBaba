@@ -6,7 +6,7 @@ import HomePage from "./pages/HomePage";
 import CreateListing from "./pages/CreateListing";
 import CategoryPage from "./pages/CategoryPage";
 import SearchPage from "./pages/SearchPage";
-import DetailPge from "./pages/DetailPage";
+import DetailPage from "./pages/DetailPage";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { useSelector } from "react-redux";
