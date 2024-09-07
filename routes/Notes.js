@@ -7,12 +7,16 @@ const router = express.Router();
 router.post(
   "/create",
   verifyToken,
-  cloudinaryFileUploader.array("noteFiles", 12),
+  cloudinaryFileUploader.fields([
+    { name: "noteFiles", maxCount: 12 },
+    { name: "docImg", maxCount: 1 },
+  ]),
   controller.createNotes
 );
 
 router.get("/", controller.getNotesByquery);
 router.get("/:noteId", controller.getNoteById);
+router.get("/", controller.getNoteBySlug);
 router.get("/search/:search", controller.getNotesBySearch);
 
 export default router;

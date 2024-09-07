@@ -20,11 +20,19 @@ const uploadImage = async (file) => {
 
 const createNotes = async (req, res) => {
   try {
-    const { subject, semester, title, description, noteType } = req.body;
+    const { subject, semester, title, description, noteType, topics } =
+      req.body;
     const files = req.files;
     const userID = req.userId;
 
-    if (!subject || !semester || !title || !description || !noteType) {
+    if (
+      !subject ||
+      !semester ||
+      !title ||
+      !description ||
+      !noteType ||
+      !topics
+    ) {
       return res.status(400).json({
         success: false,
         message: "Missing required fields.",
@@ -38,8 +46,10 @@ const createNotes = async (req, res) => {
       });
     }
 
+    let docImg = await cloudinary.uploader.upload(files.docImg[0].path);
+
     const listingDocUrl = await Promise.all(
-      files.map(async (file) => {
+      files.noteFiles.map(async (file) => {
         try {
           return await uploadImage(file);
         } catch (err) {
@@ -63,7 +73,9 @@ const createNotes = async (req, res) => {
       title,
       description,
       listingDocUrl,
+      docImg: docImg.secure_url,
       noteType,
+      topics,
     });
 
     await newNotes.save();
@@ -75,6 +87,7 @@ const createNotes = async (req, res) => {
     });
   } catch (err) {
     console.error("Failed to create note listing:", err.message);
+    console.log(err);
     res.status(500).json({
       success: false,
       message: "Failed to create note listing.",
@@ -221,4 +234,38 @@ const getNoteById = async (req, res) => {
   }
 };
 
-export default { createNotes, getNotesByquery, getNotesBySearch, getNoteById };
+const getNoteBySlug = async (req, res) => {
+  const { slug } = req.query;
+
+  try {
+    const note = await Notes.findOne(slug).populate("creator");
+
+    if (!note) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Note retrieved successfully.",
+      data: note,
+    });
+  } catch (err) {
+    console.error("Error fetching note:", err.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch note.",
+      error: err.message,
+    });
+  }
+};
+
+export default {
+  createNotes,
+  getNotesByquery,
+  getNotesBySearch,
+  getNoteById,
+  getNoteBySlug,
+};
