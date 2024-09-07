@@ -18,6 +18,7 @@ const CreateListing = () => {
 
   /* DOCUMENT UPLOAD */
   const [documents, setDocuments] = useState([]);
+  const [docImg, setDocImg] = useState(null);
 
   const handleUploadDocuments = (e) => {
     const newDocuments = e.target.files;
@@ -66,8 +67,7 @@ const CreateListing = () => {
       [name]: value,
     });
   };
-
-  const creatorId = useSelector((state) => state.user._id);
+  const token = useSelector((state) => state.token);
 
   const navigate = useNavigate();
 
@@ -78,13 +78,13 @@ const CreateListing = () => {
     try {
       /* Create a new FormData object to handle file uploads */
       const noteForm = new FormData();
-      noteForm.append("creator", creatorId);
       noteForm.append("subject", subject);
       noteForm.append("semester", semester.slice(8));
       noteForm.append("noteType", noteType);
       noteForm.append("title", formDescription.title);
       noteForm.append("description", formDescription.description);
       noteForm.append("topics", formDescription.topics);
+      noteForm.append("docImg", docImg);
 
       /* Append each selected document to the FormData object */
       documents.forEach((document) => {
@@ -96,6 +96,9 @@ const CreateListing = () => {
         `${process.env.REACT_APP_BASE_URL}/notes/create`,
         {
           method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
           body: noteForm,
         }
       );
@@ -154,12 +157,12 @@ const CreateListing = () => {
             <div className="type-list">
               {noteTypes?.map((item, index) => (
                 <div
-                  className={`type ${noteType === item.name ? "selected" : ""}`}
+                  className={`type ${noteType === item.label ? "selected" : ""}`}
                   key={index}
-                  onClick={() => setNoteType(item.name)}
+                  onClick={() => setNoteType(item.label)}
                 >
                   <div className="type_text">
-                    <h4>{item.name}</h4>
+                    <h4>{item.label}</h4>
                     <p>{item.description}</p>
                   </div>
                   <div className="type_icon">{item.icon}</div>
@@ -173,6 +176,14 @@ const CreateListing = () => {
             <hr />
             <h3>Provide a brief description of your notes:</h3>
             <div className="description">
+              <p>Doc Img</p>
+              <input
+                type="file"
+                placeholder="Title"
+                name="docImg"
+                onChange={(e) => setDocImg(e.target.files[0])}
+                required
+              />
               <p>Title</p>
               <input
                 type="text"
@@ -246,6 +257,7 @@ const CreateListing = () => {
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                 >
+                                  console.log(document)
                                   <p>{document.name}</p>
                                   <button
                                     type="button"
@@ -281,7 +293,11 @@ const CreateListing = () => {
             <span>The file size should not exceed 10 megabytes.</span>
           </div>
 
-          <button className="submit_btn" type="submit" disabled={loading|| error}>
+          <button
+            className="submit_btn"
+            type="submit"
+            disabled={loading || error}
+          >
             {loading ? "UPLOADING..." : "UPLOAD NOTES"}
           </button>
         </form>

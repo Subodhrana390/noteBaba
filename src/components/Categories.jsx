@@ -1,8 +1,9 @@
 import { noteTypes } from "../data";
 import "../styles/Categories.scss";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Categories = () => {
+  const navigate = useNavigate();
   return (
     <div className="categories">
       <h1>Explore Top Categories</h1>
@@ -17,16 +18,19 @@ const Categories = () => {
 
       <div className="categories_list">
         {noteTypes?.map((category, index) => (
-          <Link to={`/category/${category.name}`} key={index}>
+          <div
+            onClick={() => navigate(`/category/${category.label}`)}
+            key={index}
+          >
             <div className="category" key={index}>
-              <img src={category.img} alt={category.label} />
+              {/* <img src={category.img} alt={category.label} /> */}
               <div className="overlay"></div>
               <div className="category_text">
                 <div className="category_text_icon">{category.icon}</div>
-                <p>{category.name}</p>
+                <p>{category.label}</p>
               </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     </div>

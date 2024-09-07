@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import WarningIcon from "@mui/icons-material/Warning";
 import "../styles/CategoryPage.scss";
 import Loader from "../components/Loader";
@@ -10,6 +10,7 @@ const CategoryBySemester = () => {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -42,7 +43,7 @@ const CategoryBySemester = () => {
           <ul>
             {notes.map((note, index) => (
               <li key={index} className="card">
-                <a href={`/${note._id}`} target="_blank">
+                <div onClick={() => navigate(`/note/${note._id}`)}>
                   <div className="card_img" style={{ marginBottom: "10px" }}>
                     <img
                       src="https://www.elegantthemes.com/blog/wp-content/uploads/2018/12/top11.png"
@@ -55,7 +56,7 @@ const CategoryBySemester = () => {
                     <h3 className="card_title">{note.title}</h3>
                     <p className="card_description">{note.description}</p>
                   </div>
-                </a>
+                </div>
               </li>
             ))}
           </ul>

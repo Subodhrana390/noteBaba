@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { setLogin } from "../redux/state";
+import { setLogin } from "../redux/userSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.scss";
@@ -16,13 +16,16 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BASE_URL}/auth/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       /* Get data after fetching */
       const loggedIn = await response.json();

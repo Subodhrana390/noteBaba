@@ -12,10 +12,24 @@ import Navbar from "./components/Navbar";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Loader from "./components/Loader";
-
+import NotesPage from "./pages/NotesPage";
 
 function App() {
   const user = useSelector((state) => state.user);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadUserData = () => {
+      setIsLoaded(true);
+    };
+
+    loadUserData();
+  }, []);
+
+  if (!isLoaded) {
+    return <Loader />;
+  }
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -37,7 +51,8 @@ function App() {
           />
           <Route path="/search" element={<SearchPage />} />
           <Route path="*" element={<HomePage />} />
-          <Route path="/:noteId" element={<DetailPage/>} />
+          <Route path="/notes" element={<NotesPage />} />
+          <Route path="/note/:noteId" element={<DetailPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>

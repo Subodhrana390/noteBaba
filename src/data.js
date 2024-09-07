@@ -13,32 +13,32 @@ export const semesters = [
 
 export const noteTypes = [
   {
-    name: "Lecture Notes",
+    label: "Lecture Notes",
     description: "Detailed notes from lectures and classes.",
     icon: "📝",
   },
   {
-    name: "Exam Prep",
+    label: "Exam Prep",
     description: "Study guides and materials for exam preparation.",
     icon: "📖",
   },
   {
-    name: "Lab Reports",
+    label: "Lab Reports",
     description: "Reports and findings from laboratory experiments.",
     icon: "🔬",
   },
   {
-    name: "Assignments",
+    label: "Assignments",
     description: "Homework and project assignments.",
     icon: "🗂️",
   },
   {
-    name: "PPTs",
+    label: "PPTs",
     description: "PowerPoint presentations from classes.",
     icon: "📊",
   },
   {
-    name: "PDF Books",
+    label: "PDF Books",
     description: "PDF versions of textbooks or reading materials.",
     icon: "📚",
   },

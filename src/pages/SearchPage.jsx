@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "../styles/SearchPage.scss";
+import { useNavigate } from "react-router-dom";
 
 const SearchPage = () => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(null);
   const [counts, setCounts] = useState(0);
   const [notes, setNotes] = useState([]);
   const [cancelToken, setCancelToken] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (value) => {
     setSearch(value);
@@ -28,8 +30,8 @@ const SearchPage = () => {
       })
         .then((response) => {
           console.log(response);
-          setCounts(response.data.counts);
-          setNotes(response.data.listings);
+          setCounts(response.data.data.total);
+          setNotes(response.data.data.notes);
         })
         .catch((err) => {
           if (axios.isCancel(err)) {
@@ -68,7 +70,7 @@ const SearchPage = () => {
             {Array.isArray(notes) &&
               notes.map((note, index) => (
                 <li key={index} className="card">
-                  <a href={`/${note._id}`} target="_blank">
+                  <div onClick={() => navigate(`/note/${note._id}`)}>
                     <div className="card_img" style={{ marginBottom: "10px" }}>
                       <img
                         src="https://www.elegantthemes.com/blog/wp-content/uploads/2018/12/top11.png"
@@ -81,7 +83,7 @@ const SearchPage = () => {
                       <h4 className="card_title">{note.title}</h4>
                       <p className="card_description">{note.description}</p>
                     </div>
-                  </a>
+                  </div>
                 </li>
               ))}
           </ul>
