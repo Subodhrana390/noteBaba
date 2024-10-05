@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import axios from axios;
+import axios from "axios";
 dotenv.config();
 import cors from "cors";
 import bodyParser from "body-parser";
