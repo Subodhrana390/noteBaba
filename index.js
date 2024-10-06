@@ -25,7 +25,7 @@ app.get("/health", (req, res) => {
 const keepAlive = () => {
   setInterval(async () => {
     try {
-      const res = await axios.get('https://dmc-server.onrender.com/health');
+      const res = await axios.get('https://notebaba.onrender.com/health');
       console.log(`Self-ping success: ${res.data}`);
     } catch (error) {
       console.error('Self-ping failed:', error.message);
