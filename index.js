@@ -37,5 +37,4 @@ const keepAlive = () => {
 // Server Initialization
 app.listen(PORT, () => {
   console.log(`Server is running on PORT: ${PORT}`);
-  keepAlive()
 });
